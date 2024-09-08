@@ -1,0 +1,51 @@
+name: Build and Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: ${{ secrets.GCP_KEY }}
+        project_id: sp-dashboard-434500
+
+    - name: Authenticate Docker to Artifact Registry
+      run: |
+        gcloud auth configure-docker us-docker.pkg.dev
+
+    - name: Build and push backend Docker image
+      run: |
+        docker build -t us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest -f backend/Dockerfile .
+        docker push us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest
+
+    - name: Build and push frontend Docker image
+      run: |
+        docker build -t us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-frontend:latest -f src/Dockerfile .
+        docker push us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-frontend:latest
+
+    - name: Deploy to Cloud Run Backend
+      run: |
+        gcloud run deploy sp-dashboard-backend \
+          --image=us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest \
+          --region=us-central1 \
+          --platform=managed \
+          --allow-unauthenticated
+
+    - name: Deploy to Cloud Run Frontend
+      run: |
+        gcloud run deploy sp-dashboard-frontend \
+          --image=us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-frontend:latest \
+          --region=us-central1 \
+          --platform=managed \
+          --allow-unauthenticated
