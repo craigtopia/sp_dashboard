@@ -34,14 +34,14 @@ jobs:
     - name: Build and push backend Docker image
       run: |
         echo "Building and pushing the backend Docker image..."
-        docker build -t us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest -f backend/Dockerfile .
+        docker buildx build --platform linux/amd64 -t us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest -f backend/Dockerfile .
         docker push us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest
         echo "Backend Docker image built and pushed successfully."
 
     - name: Build and push frontend Docker image
       run: |
         echo "Building and pushing the frontend Docker image..."
-        docker build -t us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-frontend:latest -f src/Dockerfile .
+        docker buildx build --platform linux/amd64 -t us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-frontend:latest -f src/Dockerfile .
         docker push us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-frontend:latest
         echo "Frontend Docker image built and pushed successfully."
 
@@ -53,6 +53,8 @@ jobs:
           --region=us-central1 \
           --platform=managed \
           --allow-unauthenticated
+          --set-env-vars "REACT_APP_BACKEND_URL=https://sp-dashboard-backend-77119817287.us-central1.run.app"
+          --set-env-vars "REACT_APP_FRONTEND_URL=https://sp-dashboard-frontend-77119817287.us-central1.run.app"
         echo "Backend deployed to Cloud Run."
 
     - name: Deploy to Cloud Run Frontend
@@ -63,5 +65,6 @@ jobs:
           --region=us-central1 \
           --platform=managed \
           --allow-unauthenticated
+          --set-env-vars "REACT_APP_BACKEND_URL=https://sp-dashboard-backend-77119817287.us-central1.run.app"
+          --set-env-vars "REACT_APP_FRONTEND_URL=https://sp-dashboard-frontend-77119817287.us-central1.run.app"
         echo "Frontend deployed to Cloud Run."
-
