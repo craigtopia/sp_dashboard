@@ -36,7 +36,7 @@ jobs:
         echo "Building and pushing the backend Docker image..."
         docker build -t us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest -f backend/Dockerfile .
         docker push us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-backend:latest
-        echo "Backend Docker image built and pushed successfully.
+        echo "Backend Docker image built and pushed successfully."
 
     - name: Build and push frontend Docker image
       run: |
@@ -64,3 +64,4 @@ jobs:
           --platform=managed \
           --allow-unauthenticated
         echo "Frontend deployed to Cloud Run."
+
