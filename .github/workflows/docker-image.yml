@@ -58,7 +58,7 @@ jobs:
           --region=us-central1 \
           --platform=managed \
           --allow-unauthenticated \
-          --env-vars-file=env-production-gcloud.yml \
+          --env-vars-file=env-production-gcloud.yml
         echo "Backend deployed to Cloud Run."
 
     - name: Deploy to Cloud Run Frontend
@@ -69,5 +69,5 @@ jobs:
           --region=us-central1 \
           --platform=managed \
           --allow-unauthenticated \
-          --env-vars-file=env-production-gcloud.yml \
+          --env-vars-file=env-production-gcloud.yml
         echo "Frontend deployed to Cloud Run."
