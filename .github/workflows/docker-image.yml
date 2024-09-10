@@ -45,7 +45,7 @@ jobs:
         docker push us-docker.pkg.dev/sp-dashboard-434500/docker/sp-dashboard-frontend:latest
         echo "Frontend Docker image built and pushed successfully."
 
-    - name: Convert .env.production to env-vars.yaml
+    - name: Convert .env.production to env-production-gcloud.yml
       run: |
         chmod +x convert-env-to-yml.sh
         ./convert-env-to-yml.sh
