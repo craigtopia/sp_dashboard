@@ -47,8 +47,8 @@ jobs:
 
     - name: Convert .env.production to env-vars.yaml
       run: |
-        chmod +x convert-env-to-yaml.sh
-        ./convert-env-to-yaml.sh
+        chmod +x convert-env-to-yml.sh
+        ./convert-env-to-yml.sh
     
     - name: Deploy to Cloud Run Backend
       run: |
